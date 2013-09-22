@@ -1,6 +1,6 @@
 <div class="unread">
 	<ol class="breadcrumb">
-		<li><a href="/">Home</a></li>
+		<li><a href="/">Übersicht</a></li>
 		<li class="active">{category_name}</li>
 		<div id="category_active_users"></div>
 	</ol>
@@ -10,10 +10,10 @@
 	</a>
 
 	<div class="alert alert-warning {no_topics_message}" id="category-no-topics">
-		<strong>There are no unread topics.</strong>
+		<strong>Es gibt keine ungelesene Themen.</strong>
 	</div>
 
-	<button id="mark-allread-btn" class="btn btn-primary {show_markallread_button}">Mark all as Read</button>
+	<button id="mark-allread-btn" class="btn btn-primary {show_markallread_button}">Alle als gelesen markieren</button>
 
 	<div class="category row">
 		<div class="{topic_row_size}">
@@ -27,15 +27,14 @@
 								<div class="pull-right">
 									<img style="width: 48px; height: 48px; /*temporary*/" src="{topics.teaser_userpicture}" />
 									<p><strong>{topics.teaser_username}</strong>: {topics.teaser_text}</p>
-									<span>posted</span>
-									<span class="timeago" title="{topics.teaser_timestamp}"></span>
+									<span>posted {topics.teaser_timestamp} ago</span>
 								</div>
 							</div>
 							<div>
 								<h3><span class="topic-title"><span class="badge {topics.badgeclass}">{topics.postcount}</span>{topics.title}</span></h3>
 								<small>
 									<strong><i class="{topics.pin-icon}"></i><i class="{topics.lock-icon}"></i></strong>
-									<span>Posted </span><span class="timeago" title="{topics.relativeTime}"></span><span> by</span>
+									Posted {topics.relativeTime} ago by
 									<strong>{topics.username}</strong>.
 								</small>
 							</div>
@@ -45,7 +44,7 @@
 			</a>
 			<!-- END topics -->
 			</ul>
-			<button id="load-more-btn" class="btn btn-primary hide">Load More</button>
+			<button id="load-more-btn" class="btn btn-primary hide">mehr Laden</button>
 		</div>
 	</div>
 </div>

@@ -1,5 +1,5 @@
 		<ol class="breadcrumb">
-			<li><a href="/">Home</a></li>
+			<li><a href="/">Übersicht</a></li>
 			<li class="active">{category_name}</li>
 			<div id="category_active_users"></div>
 		</ol>
@@ -11,7 +11,7 @@
 				<div class="teaser">
 					<img class="img-thumbnail" src="{topics.teaser_userpicture}" />
 					<p>
-						{topics.teaser_text}
+						vor {topics.teaser_text} &mdash; {topics.teaser_timestamp}
 					</p>
 					<div class="clear"></div>
 				</div>
