@@ -66,7 +66,7 @@
 		</div>
 
 		<div class="copyright"><a href="/">Übersicht</a> | <a href="/impressum.html">Impressum</a><br />
-		Copyright &copy; 2013 <a href="http://nodeforum.de">nodeforum.de</a> | powered by <a target="_blank" href="http://www.nodebb.org">NodeBB</a>
+		Copyright &copy; 2013 <a href="http://nodeforum.de">nodeforum.de</a>, powered by <a target="_blank" href="http://www.nodebb.org">NodeBB</a>
 	</footer>
 
 	<script>
