@@ -63,7 +63,7 @@
 			</div>
 		</div>
 
-		<div class="copyright"><a href="/">Übersicht</a> | <a href="/recent">Aktuell</a> | <a href="/impressum.html">Impressum</a> | <a href="//github.com/nodecode/nodeforum.de">Quellcode</a><br />
+		<div class="copyright"><a href="/">Übersicht</a> | <a href="/recent">Aktuell</a> | <a href="/impressum.html">Impressum</a> | <a target="_blank" href="//github.com/nodecode/nodeforum.de">Quellcode</a><br />
 		Copyright &copy; 2013 <a href="http://nodeforum.de">nodeforum.de</a>, powered by <a target="_blank" href="http://www.nodebb.org">NodeBB</a>
 	</footer>
 
