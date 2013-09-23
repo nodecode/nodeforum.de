@@ -1,12 +1,12 @@
-Hello,
+Hallo,
 
-Thank you for registering with NodeBB!
+Du hast dich erfolgreich im NodeForum registriert!
 
-To fully activate your account, we need to verify that you own the email address you registered with.
+Um deinen Account komplett zu aktivieren, musst du deine E-Mail-Adresse noch bestätigen.
 
-Please click on the following link:
+Besuche dazu einfach den folgenden Link:
 
     {CONFIRM_LINK}
 
-Thanks!
-NodeBB
+MfG.
+NodeForum.de
