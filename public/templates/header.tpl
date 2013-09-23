@@ -3,12 +3,12 @@
 <head>
 	<title>{browserTitle}</title>
 	{meta_tags}
-	<link href="{cssSrc}" rel="stylesheet" media="screen">
+	<link href="{relative_path}/css/bootstrap.min.css" rel="stylesheet" media="screen">
 	<link rel="stylesheet" href="{relative_path}/vendor/fontawesome/css/font-awesome.min.css">
 	<script>
 		var RELATIVE_PATH = "{relative_path}";
 	</script>
-	<script src="http://code.jquery.com/jquery.js"></script>
+	<script src="{relative_path}/jquery.min.js"></script>
 	<script src="{relative_path}/vendor/jquery/js/jquery-ui-1.10.3.custom.min.js"></script>
 	<script src="{relative_path}/vendor/jquery/js/jquery.timeago.js"></script>
 	<script src="{relative_path}/vendor/bootstrap/js/bootstrap.min.js"></script>
