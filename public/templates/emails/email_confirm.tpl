@@ -1,7 +1,6 @@
-
-<p>Hello,</p>
-<p><strong>Thank you for registering with NodeBB!</strong></p>
-<p>To fully activate your account, we need to verify that you own the email address you registered with.</p>
-<p>Please click on the following link:</p>
+<p>Hallo,</p>
+<p><strong>Du hast dich erfolgreich im NodeForum registriert!</strong></p>
+<p>Um deinen Account komplett zu aktivieren, müsst du deine E-Mail-Adresse noch bestätigen.</p>
+<p>Besuche dazu einfach den folgenden Link:</p>
 <blockquote>{CONFIRM_LINK}</blockquote>
-<p>Thanks!<br /><strong>NodeBB</strong>
+<p>MfG.<br /><strong>NodeForum.de</strong>
