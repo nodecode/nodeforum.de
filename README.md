@@ -1,1 +1,1 @@
-check out [NodeBB](https://github.com/designcreateplay/NodeBB)
+http://nodeforum.de/
