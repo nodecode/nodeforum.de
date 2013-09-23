@@ -8,7 +8,7 @@
 	<script>
 		var RELATIVE_PATH = "{relative_path}";
 	</script>
-	<script src="{relative_path}/jquery.min.js"></script>
+	<script src="{relative_path}/src/jquery.min.js"></script>
 	<script src="{relative_path}/vendor/jquery/js/jquery-ui-1.10.3.custom.min.js"></script>
 	<script src="{relative_path}/vendor/jquery/js/jquery.timeago.js"></script>
 	<script src="{relative_path}/vendor/bootstrap/js/bootstrap.min.js"></script>
