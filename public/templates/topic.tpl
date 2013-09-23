@@ -40,7 +40,7 @@
 							<div class="btn-group">
 								<button class="btn btn-sm btn-default follow" type="button" title="Be notified of new replies in this topic"><i class="icon-eye-open"></i></button>
 								<button class="favourite btn btn-sm btn-default {main_posts.fav_button_class}" type="button">
-									<span class="favourite-text">Favourite</span>
+									<span class="favourite-text">Favorit</span>
 									<span class="post_rep_{main_posts.pid}">{main_posts.post_rep} </span><i class="{main_posts.fav_star_class}"></i>
 								</button>
 							</div>

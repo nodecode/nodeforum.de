@@ -1,5 +1,5 @@
 <ol class="breadcrumb">
-	<li><a href="/">Home</a></li>
+	<li><a href="/">Übersicht</a></li>
 	<li class="active">{category_name}</li>
 	<div id="category_active_users"></div>
 </ol>

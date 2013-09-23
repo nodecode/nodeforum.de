@@ -1,6 +1,6 @@
 <ol class="breadcrumb">
 	<li itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb">
-		<a href="/" itemprop="url"><span itemprop="title">Home</span></a>
+		<a href="/" itemprop="url"><span itemprop="title">Übersicht</span></a>
 	</li>
 	<li class="active" itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb">
 		<span itemprop="title">{category_name} <a target="_blank" href="../{category_id}.rss"><i class="icon-rss-sign"></i></a></span>
@@ -9,7 +9,7 @@
 </ol>
 
 <div>
-	<button id="new_post" class="btn btn-primary btn-lg {show_topic_button}">New Topic</button>
+	<button id="new_post" class="btn btn-primary btn-lg {show_topic_button}">neues Thema</button>
 
 	<div class="inline-block pull-right">
 		<a href="#" id="facebook-share"><i class="icon-facebook-sign icon-2x"></i></a>&nbsp;
@@ -21,8 +21,9 @@
 <hr/>
 
 <div class="alert alert-warning hide {no_topics_message}" id="category-no-topics">
-	<strong>There are no topics in this category.</strong><br />
+	<strong>Es gibt noch keine Themen in dieser Kategorie.</strong><br />
 	Why don't you try posting one?
+	Warum beginnst du nicht das erste Thema?
 </div>
 
 <div class="category row">
@@ -45,7 +46,7 @@
 						<h3><span class="topic-title"><span class="badge {topics.badgeclass}">{topics.postcount}</span>{topics.title}</span></h3>
 						<small>
 							<strong><i class="{topics.pin-icon}"></i> <i class="{topics.lock-icon}"></i></strong>
-							Posted <span class="timeago" title="{topics.relativeTime}"></span> by
+							geschrieben <span class="timeago" title="{topics.relativeTime}"></span> von
 							<strong>{topics.username}</strong>.
 						</small>
 					</div>
@@ -59,7 +60,7 @@
 
 		<div class="sidebar-block img-thumbnail">
 			<div class="block-header">
-				Recent Replies
+				neuste Antworten
 			</div>
 			<div class="block-content recent-replies">
 				<ul id="category_recent_replies"></ul>
@@ -67,7 +68,7 @@
 		</div>
 		<div class="sidebar-block img-thumbnail">
 			<div class="block-header">
-				Active Participants
+				aktive Teilnehmer
 			</div>
 			<div class="block-content">
 				<!-- BEGIN active_users -->
