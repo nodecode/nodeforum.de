@@ -22,7 +22,6 @@
 
 <div class="alert alert-warning hide {no_topics_message}" id="category-no-topics">
 	<strong>Es gibt noch keine Themen in dieser Kategorie.</strong><br />
-	Why don't you try posting one?
 	Warum beginnst du nicht das erste Thema?
 </div>
 
