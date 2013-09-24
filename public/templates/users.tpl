@@ -1,17 +1,10 @@
 <div class="users">
 	<ul class="nav nav-pills">
-<<<<<<< HEAD
 		<li class=''><a href='/users/latest'>neuste Users</a></li>
 		<li class=''><a href='/users/sort-posts'>meiste Posts</a></li>
 		<li class=''><a href='/users/sort-reputation'>höhstes Ansehen</a></li>
-		<li class=''><a href='/users/search'>Suchen</a></li>
-=======
-		<li class=''><a href='/users/latest'>Latest Users</a></li>
-		<li class=''><a href='/users/sort-posts'>Top Posters</a></li>
-		<li class=''><a href='/users/sort-reputation'>Most Reputation</a></li>
 		<li class=''><a href='/users/online'>Online</a></li>
-		<li class=''><a href='/users/search'>Search</a></li>
->>>>>>> 99440585e6198cd543787ba3b92efa8740df3160
+		<li class=''><a href='/users/search'>Suchen</a></li>
 	</ul>
 
 	<br />

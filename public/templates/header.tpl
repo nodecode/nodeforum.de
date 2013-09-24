@@ -8,13 +8,6 @@
 	<script>
 		var RELATIVE_PATH = "{relative_path}";
 	</script>
-<<<<<<< HEAD
-	<script src="{relative_path}/src/jquery.min.js"></script>
-	<script src="{relative_path}/vendor/jquery/js/jquery-ui-1.10.3.custom.min.js"></script>
-	<script src="{relative_path}/vendor/jquery/js/jquery.timeago.js"></script>
-	<script src="{relative_path}/vendor/bootstrap/js/bootstrap.min.js"></script>
-=======
->>>>>>> 99440585e6198cd543787ba3b92efa8740df3160
 	<script src="{relative_path}/socket.io/socket.io.js"></script>
 	<script src="{relative_path}/src/nodebb.min.js"></script>
 	<script>
