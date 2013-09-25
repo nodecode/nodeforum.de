@@ -2,6 +2,6 @@
 	<strong>{title}</strong>
 	<p>{text}</p>
 	<p>
-		<a href="/">NodeBB Übersicht</a>
+		<a href="/">NodeBB Home</a>
 	</p>
 </div>

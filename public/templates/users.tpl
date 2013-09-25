@@ -1,17 +1,17 @@
 <div class="users">
 	<ul class="nav nav-pills">
-		<li class=''><a href='/users/latest'>neuste Users</a></li>
-		<li class=''><a href='/users/sort-posts'>meiste Posts</a></li>
-		<li class=''><a href='/users/sort-reputation'>höhstes Ansehen</a></li>
-		<li class=''><a href='/users/online'>Online</a></li>
-		<li class=''><a href='/users/search'>Suchen</a></li>
+		<li class=''><a href='/users/latest'>[[users:latest_users]]</a></li>
+		<li class=''><a href='/users/sort-posts'>[[users:top_posters]]</a></li>
+		<li class=''><a href='/users/sort-reputation'>[[users:most_reputation]]</a></li>
+		<li class=''><a href='/users/online'>[[users:online]]</a></li>
+		<li class=''><a href='/users/search'>[[users:search]]</a></li>
 	</ul>
 
 	<br />
 	<div class="search {search_display} well">
 
 		<div class="input-group">
-			<input class="form-control" id="search-user" type="text" placeholder="Benutzer durchsuchen"/>
+			<input class="form-control" id="search-user" type="text" placeholder="[[users:enter_username]]"/>
 	        <span class="input-group-addon">
 	        	<span id="user-notfound-notify"><i class="icon icon-circle-blank"></i></span>
 	        </span>
@@ -42,7 +42,7 @@
 	</ul>
 
 	<div class="text-center {loadmore_display}">
-		<button id="load-more-users-btn" class="btn btn-primary">mehr laden</button>
+		<button id="load-more-users-btn" class="btn btn-primary">[[users:load_more]]</button>
 	</div>
 </div>
 

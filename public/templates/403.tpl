@@ -1,4 +1,4 @@
 <div class="alert alert-danger">
-	<strong>Zugriff Verweigert</strong>
-	<p>Du bist nicht dazu berechtigt, diese Seite aufzurufen. <a href="/login">Loggen dich ein</a> und versuche es erneut.</p>
+	<strong>[[global:403.title]]</strong>
+	<p>[[global:403.message]]</p>
 </div>

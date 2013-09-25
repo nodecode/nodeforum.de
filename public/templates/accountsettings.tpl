@@ -4,16 +4,16 @@
 	<div class="account-username-box" data-userslug="{userslug}">
 		<span class="account-username">
 			<a href="/user/{userslug}">{username}</a> <i class="icon-chevron-right"></i>
-			<a href="/user/{userslug}/settings">Einstellungen</a>
+			<a href="/user/{userslug}/settings">settings</a>
 		</span>
 	</div>
 
 	<div class="row">
 		<div class="col-md-6">
-			<h4>Privatsphäre</h4>
+			<h4>privacy</h4>
 			<div class="checkbox">
 				<label>
-	      			<input id="showemailCheckBox" type="checkbox" {showemail}> Zeige meine Email-adresse
+	      			<input id="showemailCheckBox" type="checkbox" {showemail}> Show my email
 	    		</label>
 	    	</div>
 		</div>
@@ -23,7 +23,7 @@
 		</div>
 	</div>
 	<div class="form-actions">
-		<a id="submitBtn" href="#" class="btn btn-primary">Änderungen Speichern</a>
+		<a id="submitBtn" href="#" class="btn btn-primary">Save changes</a>
 	</div>
 </div>
 

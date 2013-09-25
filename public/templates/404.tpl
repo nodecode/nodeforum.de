@@ -1,4 +1,4 @@
 <div class="alert alert-danger">
-	<strong>Nicht Gefunden</strong>
-	<p>Die abgefragte Seite wurde nicht gefunden. <a href="/">Zurück zur Übersicht</a></p>
+	<strong>[[global:404.title]]</strong>
+	<p>[[global:404.message]]</p>
 </div>

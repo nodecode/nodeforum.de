@@ -4,137 +4,149 @@ var socket,
 	API_URL = null;
 
 
-(function() {
+(function () {
 	var showWelcomeMessage = false;
 
-	function loadConfig() {
+	app.loadConfig = function() {
 
 		$.ajax({
 			url: RELATIVE_PATH + '/api/config',
-			success: function(data) {
+			success: function (data) {
 				API_URL = data.api_url;
 
 				config = data;
-				socket = io.connect(config.socket.address);
+				if(socket) {
+					socket.disconnect();
+					setTimeout(function() {
+						socket.socket.connect();
+					}, 200);
+				} else {
+					socket = io.connect(config.socket.address);
 
-				var reconnecting = false;
-				var reconnectTries = 0;
+					var reconnecting = false;
+					var reconnectTries = 0;
 
-				socket.on('event:connect', function(data) {
-					console.log('connected to nodebb socket: ', data);
-					app.username = data.username;
-					app.showLoginMessage();
-				});
-
-				socket.on('event:alert', function(data) {
-					app.alert(data);
-				});
-
-				socket.on('connect', function(data) {
-					if (reconnecting) {
-						setTimeout(function() {
-							app.alert({
-								alert_id: 'connection_alert',
-								title: 'Connected',
-								message: 'Connection successful.',
-								type: 'success',
-								timeout: 5000
-							});
-						}, 1000);
-						reconnecting = false;
-						reconnectTries = 0;
+					socket.on('event:connect', function (data) {
+						app.username = data.username;
+						app.showLoginMessage();
 						socket.emit('api:updateHeader', {
 							fields: ['username', 'picture', 'userslug']
 						});
-					}
-				});
-
-				socket.on('reconnecting', function(data) {
-					function showDisconnectModal() {
-						$('#disconnect-modal').modal({
-							backdrop: 'static',
-							show: true
-						});
-
-						$('#reload-button').on('click', function() {
-							$('#disconnect-modal').modal('hide');
-							window.location.reload();
-						});
-					}
-
-					reconnecting = true;
-					reconnectTries++;
-
-					if (reconnectTries > 4) {
-						showDisconnectModal();
-						return;
-					}
-
-					app.alert({
-						alert_id: 'connection_alert',
-						title: 'Reconnecting',
-						message: 'You have disconnected from NodeBB, we will try to reconnect you. <br/><i class="icon-refresh icon-spin"></i>',
-						type: 'warning',
-						timeout: 5000
 					});
-				});
 
-				socket.on('api:user.get_online_users', function(users) {
-					jQuery('a.username-field').each(function() {
-						if (this.processed === true)
-							return;
+					socket.on('event:alert', function (data) {
+						app.alert(data);
+					});
 
-						var el = jQuery(this),
-							uid = el.parents('li').attr('data-uid');
-
-						if (uid && jQuery.inArray(uid, users) !== -1) {
-							el.find('i').remove();
-							el.prepend('<i class="icon-circle"></i>');
-						} else {
-							el.find('i').remove();
-							el.prepend('<i class="icon-circle-blank"></i>');
+					socket.on('connect', function (data) {
+						if (reconnecting) {
+							setTimeout(function () {
+								app.alert({
+									alert_id: 'connection_alert',
+									title: 'Connected',
+									message: 'Connection successful.',
+									type: 'success',
+									timeout: 5000
+								});
+							}, 1000);
+							reconnecting = false;
+							reconnectTries = 0;
 						}
 
-						el.processed = true;
+						socket.emit('api:updateHeader', {
+							fields: ['username', 'picture', 'userslug']
+						});
 					});
-					jQuery('button .username-field').each(function() {
-						//DRY FAIL
-						if (this.processed === true)
-							return;
 
-						var el = jQuery(this),
-							uid = el.parents('li').attr('data-uid');
+					socket.on('event:disconnect', function() {
+						socket.socket.connect();
+					});
 
-						if (uid && jQuery.inArray(uid, users) !== -1) {
-							el.parent().addClass('btn-success');
-						} else {
-							el.parent().addClass('btn-danger');
+					socket.on('reconnecting', function (data) {
+						function showDisconnectModal() {
+							$('#disconnect-modal').modal({
+								backdrop: 'static',
+								show: true
+							});
+
+							$('#reload-button').on('click', function () {
+								$('#disconnect-modal').modal('hide');
+								window.location.reload();
+							});
 						}
 
-						el.processed = true;
+						reconnecting = true;
+						reconnectTries++;
+
+						if (reconnectTries > 4) {
+							showDisconnectModal();
+							return;
+						}
+
+						app.alert({
+							alert_id: 'connection_alert',
+							title: 'Reconnecting',
+							message: 'You have disconnected from NodeBB, we will try to reconnect you. <br/><i class="icon-refresh icon-spin"></i>',
+							type: 'warning',
+							timeout: 5000
+						});
 					});
-				});
 
-				app.enter_room('global');
+					socket.on('api:user.get_online_users', function (users) {
+						jQuery('a.username-field').each(function () {
+							if (this.processed === true)
+								return;
 
+							var el = jQuery(this),
+								uid = el.parents('li').attr('data-uid');
 
+							if (uid && jQuery.inArray(uid, users) !== -1) {
+								el.find('i').remove();
+								el.prepend('<i class="icon-circle"></i>');
+							} else {
+								el.find('i').remove();
+								el.prepend('<i class="icon-circle-blank"></i>');
+							}
+
+							el.processed = true;
+						});
+						jQuery('button .username-field').each(function () {
+							//DRY FAIL
+							if (this.processed === true)
+								return;
+
+							var el = jQuery(this),
+								uid = el.parents('li').attr('data-uid');
+
+							if (uid && jQuery.inArray(uid, users) !== -1) {
+								el.parent().addClass('btn-success');
+							} else {
+								el.parent().addClass('btn-danger');
+							}
+
+							el.processed = true;
+						});
+					});
+
+					app.enter_room('global');
+				}
 			},
 			async: false
 		});
 	}
 
 	// takes a string like 1000 and returns 1,000
-	app.addCommas = function(text) {
+	app.addCommas = function (text) {
 		return text.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
 	}
 
 	// Willingly stolen from: http://phpjs.org/functions/strip_tags/
-	app.strip_tags = function(input, allowed) {
+	app.strip_tags = function (input, allowed) {
 		allowed = (((allowed || "") + "").toLowerCase().match(/<[a-z][a-z0-9]*>/g) || []).join(''); // making sure the allowed arg is a string containing only tags in lowercase (<a><b><c>)
 		var tags = /<\/?([a-z][a-z0-9]*)\b[^>]*>/gi,
 			commentsAndPhpTags = /<!--[\s\S]*?-->|<\?(?:php)?[\s\S]*?\?>/gi;
 
-		return input.replace(commentsAndPhpTags, '').replace(tags, function($0, $1) {
+		return input.replace(commentsAndPhpTags, '').replace(tags, function ($0, $1) {
 			return allowed.indexOf('<' + $1.toLowerCase() + '>') > -1 ? $0 : '';
 		});
 	}
@@ -145,14 +157,14 @@ var socket,
 	// message = alert message content
 	// timeout default = permanent
 	// location : alert_window (default) or content
-	app.alert = function(params) {
+	app.alert = function (params) {
 		var alert_id = 'alert_button_' + ((params.alert_id) ? params.alert_id : new Date().getTime());
 
 		var alert = $('#' + alert_id);
 
 		function startTimeout(div, timeout) {
-			var timeoutId = setTimeout(function() {
-				$(div).fadeOut(1000, function() {
+			var timeoutId = setTimeout(function () {
+				$(div).fadeOut(1000, function () {
 					$(this).remove();
 				});
 			}, timeout);
@@ -185,7 +197,7 @@ var socket,
 
 			button.className = 'close';
 			button.innerHTML = '&times;';
-			button.onclick = function(ev) {
+			button.onclick = function (ev) {
 				div.parentNode.removeChild(div);
 			}
 
@@ -199,9 +211,9 @@ var socket,
 			}
 
 			if (params.clickfn) {
-				div.onclick = function() {
+				div.onclick = function () {
 					params.clickfn();
-					jQuery(div).fadeOut(500, function() {
+					jQuery(div).fadeOut(500, function () {
 						this.remove();
 					});
 				}
@@ -209,7 +221,7 @@ var socket,
 		}
 	}
 
-	app.alertSuccess = function(message, timeout) {
+	app.alertSuccess = function (message, timeout) {
 		if (!timeout)
 			timeout = 2000;
 
@@ -221,7 +233,7 @@ var socket,
 		});
 	}
 
-	app.alertError = function(message, timeout) {
+	app.alertError = function (message, timeout) {
 		if (!timeout)
 			timeout = 2000;
 
@@ -234,7 +246,7 @@ var socket,
 	}
 
 	app.current_room = null;
-	app.enter_room = function(room) {
+	app.enter_room = function (room) {
 		if (socket) {
 			if (app.current_room === room)
 				return;
@@ -248,20 +260,20 @@ var socket,
 		}
 	};
 
-	app.populate_online_users = function() {
+	app.populate_online_users = function () {
 		var uids = [];
 
-		jQuery('.post-row').each(function() {
+		jQuery('.post-row').each(function () {
 			uids.push(this.getAttribute('data-uid'));
 		});
 
 		socket.emit('api:user.get_online_users', uids);
 	}
 
-	app.process_page = function() {
+	app.process_page = function () {
 
 		// here is where all modules' onNavigate should be called, I think.
-		require(['mobileMenu'], function(mobileMenu) {
+		require(['mobileMenu'], function (mobileMenu) {
 			mobileMenu.onNavigate();
 		});
 
@@ -273,7 +285,7 @@ var socket,
 
 		jQuery('#main-nav li').removeClass('active');
 		if (active) {
-			jQuery('#main-nav li a').each(function() {
+			jQuery('#main-nav li a').each(function () {
 				var href = this.getAttribute('href');
 				if (active == "sort-posts" || active == "sort-reputation" || active == "search" || active == "latest" || active == "online")
 					active = 'users';
@@ -287,12 +299,12 @@ var socket,
 		$('span.timeago').timeago();
 
 
-		setTimeout(function() {
+		setTimeout(function () {
 			window.scrollTo(0, 1); // rehide address bar on mobile after page load completes.
 		}, 100);
 	}
 
-	app.showLoginMessage = function() {
+	app.showLoginMessage = function () {
 		function showAlert() {
 			app.alert({
 				type: 'success',
@@ -312,14 +324,14 @@ var socket,
 		}
 	}
 
-	app.addCommasToNumbers = function() {
-		$('.formatted-number').each(function(index, element) {
+	app.addCommasToNumbers = function () {
+		$('.formatted-number').each(function (index, element) {
 			$(element).html(app.addCommas($(element).html()));
 		});
 	}
 
-	app.openChat = function(username, touid) {
-		require(['chat'], function(chat) {
+	app.openChat = function (username, touid) {
+		require(['chat'], function (chat) {
 			var chatModal;
 			if (!chat.modalExists(touid)) {
 				chatModal = chat.createModal(username, touid);
@@ -330,7 +342,7 @@ var socket,
 		});
 	}
 
-	app.createNewPosts = function(data) {
+	app.createNewPosts = function (data) {
 		data.posts[0].display_moderator_tools = 'none';
 		var html = templates.prepare(templates['topic'].blocks['posts']).parse(data),
 			uniqueid = new Date().getTime(),
@@ -354,7 +366,7 @@ var socket,
 
 	app.infiniteLoaderActive = false;
 
-	app.loadMorePosts = function(tid, callback) {
+	app.loadMorePosts = function (tid, callback) {
 		if (app.infiniteLoaderActive)
 			return;
 		app.infiniteLoaderActive = true;
@@ -365,7 +377,7 @@ var socket,
 		socket.emit('api:topic.loadMore', {
 			tid: tid,
 			after: document.querySelectorAll('#post-container li[data-pid]').length
-		}, function(data) {
+		}, function (data) {
 			app.infiniteLoaderActive = false;
 			if (data.posts.length) {
 				$('#loading-indicator').attr('done', '0');
@@ -379,19 +391,19 @@ var socket,
 		});
 	}
 
-	app.scrollToTop = function() {
+	app.scrollToTop = function () {
 		$('body,html').animate({
 			scrollTop: 0
 		});
 	};
 
-	app.scrollToBottom = function() {
+	app.scrollToBottom = function () {
 		$('body,html').animate({
 			scrollTop: $('html').height() - 100
 		});
 	}
 
-	app.scrollToPost = function(pid) {
+	app.scrollToPost = function (pid) {
 
 		if (!pid)
 			return;
@@ -403,13 +415,14 @@ var socket,
 		function animateScroll() {
 			$('body,html').animate({
 				scrollTop: scrollTo.offset().top - container.offset().top + container.scrollTop() - $('#header-menu').height()
-			});
+			}, 400);
+			//$('body,html').scrollTop(scrollTo.offset().top - container.offset().top + container.scrollTop() - $('#header-menu').height());
 		}
 
 		if (!scrollTo.length && tid) {
 
-			var intervalID = setInterval(function() {
-				app.loadMorePosts(tid, function(posts) {
+			var intervalID = setInterval(function () {
+				app.loadMorePosts(tid, function (posts) {
 					scrollTo = $('#post_anchor_' + pid);
 
 					if (tid && scrollTo.length) {
@@ -427,8 +440,8 @@ var socket,
 
 	}
 
-	jQuery('document').ready(function() {
-		$('#search-form').on('submit', function() {
+	jQuery('document').ready(function () {
+		$('#search-form').on('submit', function () {
 			var input = $(this).find('input');
 			ajaxify.go("search/" + input.val(), null, "search");
 			input.val('');
@@ -438,6 +451,6 @@ var socket,
 
 	showWelcomeMessage = location.href.indexOf('loggedin') !== -1;
 
-	loadConfig();
+	app.loadConfig();
 
 }());

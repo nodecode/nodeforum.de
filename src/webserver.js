@@ -25,7 +25,17 @@ var express = require('express'),
 	nconf = require('nconf');
 
 (function (app) {
-	var templates = null;
+	var templates = null,
+		clientScripts;
+
+	// Minify client-side libraries
+	meta.js.get(function (err, scripts) {
+		clientScripts = scripts.map(function (script) {
+			return script = {
+				script: script
+			}
+		});
+	});
 
 	/**
 	 *	`options` object	requires:	req, res
@@ -44,7 +54,7 @@ var express = require('express'),
 		}, {
 			property: 'og:site_name',
 			content: meta.config.title || 'NodeBB'
-		}, ],
+		}],
 			metaString = utils.buildMetaTags(defaultMetaTags.concat(options.metaTags || [])),
 			templateValues = {
 				cssSrc: meta.config['theme:src'] || nconf.get('relative_path') + '/vendor/bootstrap/css/bootstrap.min.css',
@@ -52,10 +62,13 @@ var express = require('express'),
 				browserTitle: meta.config.title || 'NodeBB',
 				csrf: options.res.locals.csrf_token,
 				relative_path: nconf.get('relative_path'),
-				meta_tags: metaString
+				meta_tags: metaString,
+				clientScripts: clientScripts
 			};
 
-		callback(null, templates.header.parse(templateValues));
+		translator.translate(templates.header.parse(templateValues), function(template) {
+			callback(null, template);
+		});
 	};
 
 	// Middlewares
@@ -112,6 +125,15 @@ var express = require('express'),
 
 	module.exports.init = function () {
 		templates = global.templates;
+
+		// translate all static templates served by webserver here. ex. footer, logout
+		translator.translate(templates['footer'].toString(), function(parsedTemplate) {
+			templates['footer'] = parsedTemplate;
+		});
+		translator.translate(templates['logout'].toString(), function(parsedTemplate) {
+			templates['logout'] = parsedTemplate;
+		});
+
 		server.listen(nconf.get('PORT') || nconf.get('port'));
 	}
 
@@ -428,7 +450,6 @@ var express = require('express'),
 		app.get('/robots.txt', function (req, res) {
 			res.set('Content-Type', 'text/plain');
 			res.send("User-agent: *\n" +
-				"Disallow: \n" +
 				"Disallow: /admin/\n" +
 				"Sitemap: " + nconf.get('url') + "sitemap.xml");
 		});
