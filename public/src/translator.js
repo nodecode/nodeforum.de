@@ -13,7 +13,7 @@
 	 *
 	 */
 
-	var DEFAULT_LANGUAGE = 'en';
+	var DEFAULT_LANGUAGE = 'de';
 
 	var translator = {},
 		files = {
