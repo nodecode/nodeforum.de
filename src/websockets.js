@@ -1,8 +1,5 @@
-var SocketIO = require('socket.io').listen(global.server, {
-	log: false,
-	transports: ['websocket', 'xhr-polling', 'jsonp-polling', 'flashsocket']
-}),
-	cookie = require('cookie'),
+
+var	cookie = require('cookie'),
 	express = require('express'),
 	user = require('./user.js'),
 	Groups = require('./groups'),
@@ -23,6 +20,7 @@ var SocketIO = require('socket.io').listen(global.server, {
 		client: RDB,
 		ttl: 60 * 60 * 24 * 14
 	}),
+	nconf = require('nconf'),
 	socketCookieParser = express.cookieParser(nconf.get('secret')),
 	admin = {
 		'categories': require('./admin/categories.js'),
@@ -31,10 +29,24 @@ var SocketIO = require('socket.io').listen(global.server, {
 	plugins = require('./plugins'),
 	winston = require('winston');
 
-(function(io) {
-	var users = {},
-		userSockets = {},
-		rooms = {};
+
+var users = {},
+	userSockets = {},
+	rooms = {};
+
+module.exports.logoutUser = function(uid) {
+	if(userSockets[uid] && userSockets[uid].length) {
+		for(var i=0; i< userSockets[uid].length; ++i) {
+			userSockets[uid][i].emit('event:disconnect');
+			userSockets[uid][i].disconnect();
+
+			if(!userSockets[uid])
+				return;
+		}
+	}
+}
+
+module.exports.init = function(io) {
 
 	global.io = io;
 
@@ -53,14 +65,17 @@ var SocketIO = require('socket.io').listen(global.server, {
 				userSockets[uid].push(socket);
 
 				if (uid) {
-					socket.join('uid_' + uid);
-					io.sockets. in ('global').emit('api:user.isOnline', isUserOnline(uid));
 
-					user.getUserField(uid, 'username', function(err, username) {
-						socket.emit('event:connect', {
-							status: 1,
-							username: username,
-							uid: uid
+					RDB.zadd('users:online', Date.now(), uid, function(err, data) {
+						socket.join('uid_' + uid);
+						io.sockets. in ('global').emit('api:user.isOnline', isUserOnline(uid));
+
+						user.getUserField(uid, 'username', function(err, username) {
+							socket.emit('event:connect', {
+								status: 1,
+								username: username,
+								uid: uid
+							});
 						});
 					});
 				}
@@ -80,7 +95,9 @@ var SocketIO = require('socket.io').listen(global.server, {
 				delete users[sessionID];
 				delete userSockets[uid];
 				if (uid) {
-					io.sockets. in ('global').emit('api:user.isOnline', isUserOnline(uid));
+					RDB.zrem('users:online', uid, function(err, data) {
+						io.sockets. in ('global').emit('api:user.isOnline', isUserOnline(uid));
+					});
 				}
 			}
 
@@ -100,7 +117,7 @@ var SocketIO = require('socket.io').listen(global.server, {
 
 		socket.on('api:get_all_rooms', function(data) {
 			socket.emit('api:get_all_rooms', io.sockets.manager.rooms);
-		})
+		});
 
 		function updateRoomBrowsingText(roomName) {
 
@@ -880,4 +897,4 @@ var SocketIO = require('socket.io').listen(global.server, {
 		});
 	});
 
-}(SocketIO));
+}
