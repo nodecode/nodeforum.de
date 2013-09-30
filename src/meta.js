@@ -7,9 +7,12 @@ var utils = require('./../public/src/utils.js'),
 	nconf = require('nconf');
 
 (function (Meta) {
+	Meta.config = {};
 
 	Meta.configs = {
 		init: function (callback) {
+			delete Meta.config;
+
 			Meta.configs.list(function (err, config) {
 				if (!err) {
 					Meta.config = config;
@@ -39,6 +42,8 @@ var utils = require('./../public/src/utils.js'),
 		set: function (field, value, callback) {
 			RDB.hset('config', field, value, function (err, res) {
 				if (callback) {
+					if(!err && Meta.config)
+						Meta.config[field] = value;
 					callback(err, res);
 				}
 			});

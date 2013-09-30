@@ -3,7 +3,7 @@ var utils = require('./../public/src/utils.js'),
 	crypto = require('crypto'),
 	emailjs = require('emailjs'),
 	meta = require('./meta.js'),
-	emailjsServer = emailjs.server.connect(meta.config.mailer || '127.0.0.1'),
+	emailjsServer = emailjs.server.connect(meta.config['email:smtp:host'] || '127.0.0.1'),
 	bcrypt = require('bcrypt'),
 	Groups = require('./groups'),
 	notifications = require('./notifications.js'),
@@ -72,7 +72,6 @@ var utils = require('./../public/src/utils.js'),
 					'reputation': 0,
 					'postcount': 0,
 					'lastposttime': 0,
-					'administrator': (uid == 1) ? 1 : 0,
 					'banned': 0,
 					'showemail': 0
 				});
@@ -113,33 +112,6 @@ var utils = require('./../public/src/utils.js'),
 			});
 		});
 	};
-
-	User.delete = function(uid, callback) {
-		RDB.exists('user:' + uid, function(err, exists) {
-			if (exists === 1) {
-				console.log('deleting uid ' + uid);
-
-				User.getUserData(uid, function(err, data) {
-
-					RDB.hdel('username:uid', data['username']);
-					RDB.hdel('email:uid', data['email']);
-					RDB.hdel('userslug:uid', data['userslug']);
-
-					RDB.del('user:' + uid);
-					RDB.del('followers:' + uid);
-					RDB.del('following:' + uid);
-
-					RDB.zrem('users:joindate', uid);
-					RDB.zrem('users:postcount', uid);
-					RDB.zrem('users:reputation', uid);
-
-					callback(true);
-				});
-			} else {
-				callback(false);
-			}
-		});
-	}
 
 	User.ban = function(uid, callback) {
 		User.setUserField(uid, 'banned', 1, callback);
@@ -347,10 +319,13 @@ var utils = require('./../public/src/utils.js'),
 
 			function iterator(uid, callback) {
 				User.getUserData(uid, function(err, userData) {
-					if (userData) {
-						data.push(userData);
-					}
-					callback(null);
+					User.isAdministrator(uid, function(isAdmin) {
+						if (userData) {
+							userData.administrator = isAdmin?"1":"0";
+							data.push(userData);
+						}
+						callback(null);
+					});
 				});
 			}
 
@@ -358,6 +333,7 @@ var utils = require('./../public/src/utils.js'),
 				callback(err, data);
 			});
 		});
+
 	}
 
 	User.createGravatarURLFromEmail = function(email) {
@@ -461,7 +437,7 @@ var utils = require('./../public/src/utils.js'),
 	}
 
 	User.sendConfirmationEmail = function(email) {
-		if (meta.config['email:host'] && meta.config['email:port'] && meta.config['email:from']) {
+		if (meta.config['email:smtp:host'] && meta.config['email:smtp:port'] && meta.config['email:from']) {
 			var confirm_code = utils.generateUUID(),
 				confirm_link = nconf.get('url') + 'confirm/' + confirm_code,
 				confirm_email = global.templates['emails/header'] + global.templates['emails/email_confirm'].parse({
@@ -484,7 +460,7 @@ var utils = require('./../public/src/utils.js'),
 			// Send intro email w/ confirm code
 			var message = emailjs.message.create({
 				text: confirm_email_plaintext,
-				from: meta.config.mailer.from,
+				from: meta.config['email:from'] || 'localhost@example.org',
 				to: email,
 				subject: '[NodeBB] Registration Email Verification',
 				attachment: [{
@@ -815,7 +791,7 @@ var utils = require('./../public/src/utils.js'),
 
 					var message = emailjs.message.create({
 						text: reset_email_plaintext,
-						from: meta.config.mailer ? meta.config.mailer.from : 'localhost@example.org',
+						from: meta.config['email:from'] ? meta.config['email:from'] : 'localhost@example.org',
 						to: email,
 						subject: 'Password Reset Requested',
 						attachment: [{
@@ -836,8 +812,7 @@ var utils = require('./../public/src/utils.js'),
 								status: "error",
 								message: "send-failed"
 							});
-							// @todo handle error properly
-							throw new Error(err);
+							winston.err(err);
 						}
 					});
 				} else {

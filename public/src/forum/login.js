@@ -32,12 +32,12 @@
 					$('#login-error-notify').show();
 				} else {
 					$('#login-error-notify').hide();
-					//window.location.replace(RELATIVE_PATH + "/?loggedin");
-					history.go(-1);
-					//setTimeout(function(){
-						app.loadConfig();
-					//}, 500);
-					//socket.emit('api:updateHeader');
+					if(app.previousUrl.indexOf('/reset/') != -1)
+						window.location.replace(RELATIVE_PATH + "/?loggedin");
+					else
+						window.location.replace(app.previousUrl + "?loggedin");
+
+					app.loadConfig();
 				}
 			},
 			error: function(data, textStatus, jqXHR) {
