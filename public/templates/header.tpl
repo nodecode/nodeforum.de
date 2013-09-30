@@ -3,7 +3,7 @@
 <head>
 	<title>{browserTitle}</title>
 	{meta_tags}
-	<link href="{cssSrc}" rel="stylesheet" media="screen">
+	<link href="{relative_path}/bootstrap.min.css" rel="stylesheet" media="screen">
 	<link rel="stylesheet" href="{relative_path}/vendor/fontawesome/css/font-awesome.min.css">
 	<script>
 		var RELATIVE_PATH = "{relative_path}";
