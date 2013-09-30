@@ -1,3 +1,6 @@
+		<h3>
+			<p id="topic_title_{main_posts.pid}" class="topic-title">{topic_name}</p>
+		</h3>
 		<ul class="posts">
 			<!-- BEGIN main_posts -->
 			<li>
